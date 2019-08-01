@@ -1,0 +1,96 @@
+mutation UpdateSystemConfig($form: UpdSystemConfig!) {
+  update_system_config(form: $form) {
+    name
+  }
+}
+
+query SystemConfig {
+  system_config {
+    name
+    logo
+    named_logo
+    copyright
+    system_logo
+    favicon
+  }
+}
+
+query AdminLog($input: QSystemLogins!) {
+  admin_logins(input: $input) {
+    size
+    total
+    data {
+      id
+      uid
+      user {
+        id
+        name
+        account
+      }
+      type
+      agent
+      ip
+      ops
+      created
+      changed
+    }
+  }
+}
+
+query AdminOnline($input: QSystemOnlines!) {
+  admin_onlines(input: $input) {
+    size
+    total
+    data {
+      id
+      uid
+      user {
+        id
+        name
+        account
+      }
+      type
+      agent
+      ip
+      ops
+      created
+      changed
+    }
+  }
+}
+
+query AdminRolePerms($id: String!, $typo: String!) {
+  admin_role_perms(id: $id, typo: $typo)
+}
+
+mutation GrantPerm(
+  $role: String!
+  $typo: String!
+  $id: [String!]
+  $status: Int!
+  $mask: String
+) {
+  grant_perm_to_role(
+    role: $role
+    typo: $typo
+    id: $id
+    status: $status
+    mask: $mask
+  )
+}
+
+mutation AdminGrantPerm(
+  $role: String!
+  $typo: String!
+  $perms: [UpdTypoPerm!]
+) {
+  admin_grant_perm_to_role(role: $role, typo: $typo, perms: $perms)
+}
+
+mutation AdminTickOff($id: String!) {
+  admin_user_tickoff(id: $id)
+}
+
+mutation DoLogout {
+  logout
+}

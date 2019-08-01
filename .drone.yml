@@ -1,0 +1,37 @@
+kind: pipeline
+name: deploy-oss
+
+steps:
+
+  - name: build
+    image: mhart/alpine-node:10
+    commands:
+      - npm config set registry https://registry.npm.taobao.org
+      - yarn config set cache-folder /drone/yarn/
+      - npx yarn install
+      - npx yarn build
+    volumes:
+      - name: yarn_cache
+        path: /drone/yarn/
+
+  - name: oss
+    image: trylife/aliyun-ossutil:latest
+    environment:
+      ALIYUN_OSS_ENDPOINT:
+        from_secret: aliyun_oss_endpoint
+      ALIYUN_ACCESS_KEY_ID:
+        from_secret: aliyun_access_key_id
+      ALIYUN_ACCESS_KEY_SECRET:
+        from_secret: aliyun_access_key_secret
+    commands:
+      - ossutil config  -L CH -e $${ALIYUN_OSS_ENDPOINT} -i $${ALIYUN_ACCESS_KEY_ID} -k $${ALIYUN_ACCESS_KEY_SECRET}
+      - pwd
+      - ossutil cp -rf ./dist/ oss://bucket-ffcode-staticfiles/LeYXtGJP/
+
+volumes:
+  - name: yarn_cache
+    host:
+      path: /data/yarn_cache
+
+trigger:
+  event: [ tag ]

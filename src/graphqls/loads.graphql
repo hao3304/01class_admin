@@ -1,0 +1,145 @@
+query loads {
+  units {
+    id
+    name
+    unit
+    precision
+    type
+    cycle
+  }
+
+  dicts {
+    id
+    name
+    values {
+      id
+      name
+      value
+    }
+  }
+
+  factories {
+    id
+    name
+  }
+
+  roles {
+    id
+    name
+  }
+
+  deps {
+    id
+    name
+    sname
+  }
+
+  areas(all: true) {
+    id
+    name
+    status
+    nstation
+    children(all: true) {
+      id
+      name
+      status
+      nstation
+      children(all: true) {
+        id
+        name
+        status
+        nstation
+        children(all: true) {
+          id
+          name
+          status
+          nstation
+        }
+      }
+    }
+  }
+
+  ticket_types {
+    id
+    name
+    otype
+    sstate {
+      id
+      name
+      mode
+      roles {
+        id
+        name
+      }
+    }
+  }
+  me {
+    id
+    name
+    avatar
+    admin
+  }
+
+  models {
+    id
+    name
+    type
+    stype
+  }
+
+  system_config {
+    name
+    logo
+    named_logo
+    system_logo
+    copyright
+    favicon
+    geo_center
+    geo_level
+    version
+  }
+
+  users(input: { orders: ["id"], page: 1, limit: 999, count: false }) {
+    size
+    total
+    data {
+      id
+      name
+    }
+  }
+}
+
+query GetSchema {
+  __schema {
+    types {
+      kind
+      name
+      description
+      inputFields {
+        name
+        description
+        type {
+          kind
+          name
+        }
+      }
+
+      fields {
+        name
+        description
+        type {
+          kind
+          name
+        }
+      }
+    }
+  }
+}
+
+query GetCommunities($keyword: String) {
+  communities(keyword: $keyword) {
+    id
+    position
+    name
+  }
+}

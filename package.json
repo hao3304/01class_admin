@@ -1,0 +1,51 @@
+{
+  "name": "01class",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "dll": "webpack -p --progress --config ./webpack.dll.conf.js"
+  },
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.5.1",
+    "apollo-client": "^2.5.1",
+    "apollo-link": "^1.2.9",
+    "apollo-link-error": "^1.1.8",
+    "apollo-link-http": "^1.5.12",
+    "apollo-link-ws": "^1.0.15",
+    "axios": "^0.18.0",
+    "echarts": "^4.1.0",
+    "fvc": "^0.6.0",
+    "fvc-iot": "^0.4.4",
+    "graphql": "^14.1.1",
+    "graphql-tag": "^2.10.1",
+    "iview": "^3.4.2",
+    "jquery": "1.12.4",
+    "lightbox2": "^2.11.0",
+    "store": "^2.0.12",
+    "unfetch": "^4.1.0",
+    "vue": "2.6.10",
+    "vue-apollo": "^3.0.0-beta.28",
+    "vue-bem-cn": "^1.1.1",
+    "vue-canvas-grid": "^0.0.1",
+    "vue-gemini-scrollbar": "^2.0.0",
+    "vue-router": "^3.0.1",
+    "vue2-animate": "^2.1.0",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.5.0",
+    "@vue/cli-plugin-eslint": "^3.5.0",
+    "@vue/cli-service": "^3.5.0",
+    "@vue/eslint-config-prettier": "^4.0.1",
+    "babel-eslint": "^10.0.1",
+    "babel-plugin-transform-modules": "^0.1.1",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
+    "vue-template-compiler": "^2.5.21"
+  }
+}
