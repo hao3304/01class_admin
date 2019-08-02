@@ -5,8 +5,21 @@ export default {
       {
         id: 1,
         name: "课程管理",
-        icon: "iconzonglan",
-        path: "Home"
+        icon: "icon-kecheng",
+        children: [
+          {
+            id: 11,
+            name: "栏目管理",
+            icon: "icon-lanmu",
+            path: "Home"
+          },
+          {
+            id: 12,
+            name: "课程列表",
+            icon: "icon-kecheng",
+            path: "Course"
+          }
+        ]
       }
     ],
     module: 0,

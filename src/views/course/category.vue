@@ -6,9 +6,9 @@
     </div>
     <f-panel :class="b('content')">
       <div slot="header">
-        <f-filter @on-filter="onSearch" :list="filters">
+        <f-filter :list="[]">
           <div slot="buttons">
-            <Button @click="onAdd" icon="md-add" type="primary">课程</Button>
+            <Button @click="onAdd" icon="md-add" type="primary">栏目</Button>
           </div>
         </f-filter>
       </div>
@@ -24,39 +24,27 @@
         ></Table>
 
         <Modal
-          :title="action == 'add' ? '新增课程' : '编辑课程'"
+          :title="action == 'add' ? '新增栏目' : '编辑栏目'"
           v-model="dialog"
-          fullscreen
         >
           <Form ref="form" :model="model" :rules="rules" :label-width="75">
-            <Row>
-              <i-col :span="12">
-                <FormItem label="课程名称" prop="title">
-                  <Input placeholder="请输入课程名称" v-model="model.title" />
-                </FormItem>
-              </i-col>
-              <i-col :span="8">
-                <FormItem label="栏目" prop="category">
-                  <tree-select
-                    :treeData="treeData"
-                    v-model="model.category"
-                    placeholder="请选择上级(默认根目录)"
-                  ></tree-select>
-                </FormItem>
-              </i-col>
-              <i-col :span="4">
-                <FormItem label="状态">
-                  <i-switch
-                    v-model="model.status"
-                    :true-value="1"
-                    :false-value="0"
-                  ></i-switch>
-                </FormItem>
-              </i-col>
-              <i-col style="border: 1px solid #ccc" :span="24">
-                <mark-down ref="editor" :initialValue="initialValue" />
-              </i-col>
-            </Row>
+            <FormItem label="栏目名称" prop="name">
+              <Input placeholder="请输入栏目名称" v-model="model.name" />
+            </FormItem>
+            <FormItem label="父栏目">
+              <tree-select
+                :treeData="treeData"
+                v-model="model.pid"
+                placeholder="请选择上级(默认根目录)"
+              ></tree-select>
+            </FormItem>
+            <FormItem label="状态">
+              <i-switch
+                v-model="model.status"
+                :true-value="1"
+                :false-value="0"
+              ></i-switch>
+            </FormItem>
           </Form>
           <div slot="footer">
             <Button @click="dialog = false">取消</Button>
@@ -77,27 +65,22 @@
 <script>
 import { renderButton } from "fvc";
 import categoryService from "@/services/category";
-import courseService from "@/services/course";
-import MarkDown from "vue-meditor";
 const Model = () => {
   return {
     id: null,
-    title: null,
-    content: null,
-    status: 1,
-    category: null
+    pid: 0,
+    name: null,
+    status: 1
   };
 };
 import base from "@/mixins/base";
 export default {
-  name: "p-course",
+  name: "p-category",
   mixins: [base],
-  components: { MarkDown },
   data() {
     return {
       loading: false,
       category: [],
-      initialValue: "",
       columns: [
         {
           type: "index",
@@ -105,25 +88,17 @@ export default {
           align: "center"
         },
         {
-          title: "课程名称",
-          key: "title",
-          width: 220
+          title: "名称",
+          key: "name",
+          width: 200
         },
         {
-          title: "栏目",
-          key: "category",
-          width: 100,
+          title: "父级",
+          key: "pid",
+          width: 200,
           render: (h, { row }) => {
-            const target = this.treeData.find(d => d.id == row.category);
+            const target = this.treeData.find(d => d.id == row.pid);
             return h("div", target ? target.name : "-");
-          }
-        },
-        {
-          title: "创建日期",
-          key: "created",
-          width: 120,
-          render: (h, { row }) => {
-            return h("div", new Date(row.created).Format("yyyy-MM-dd"));
           }
         },
         {
@@ -141,6 +116,14 @@ export default {
               },
               row.status == 1 ? "启用" : "禁用"
             );
+          }
+        },
+        {
+          title: "创建日期",
+          key: "created",
+          width: 120,
+          render: (h, { row }) => {
+            return h("div", new Date(row.created).Format("yyyy-MM-dd"));
           }
         },
         {
@@ -172,43 +155,13 @@ export default {
       treeData: [],
       data: [],
       rules: {
-        title: [{ required: true, message: "必填", trigger: "blur" }],
-        category: [
-          { required: true, type: "number", message: "必填", trigger: "change" }
-        ]
-      },
-      filters: [
-        {
-          type: "input",
-          field: "title",
-          placeholder: "请输入课程名称模糊查询",
-          name: "课程名称"
-        }
-      ],
-      query: {
-        title: null,
-        category: null
+        name: [{ required: true, message: "必填", trigger: "blur" }]
       }
     };
   },
   methods: {
-    onSearch(filters) {
-      if (filters.length > 0) {
-        this.query.title = filters[0].value;
-      } else {
-        this.query.title = null;
-      }
-      this.render();
-    },
-    render() {
-      this.loading = true;
-      courseService.findAll(this.query).then(rep => {
-        this.data = rep;
-        this.loading = false;
-      });
-    },
     renderTree() {
-      const treeData = [{ id: 0, name: "全部栏目", open: true }];
+      const treeData = [{ name: "根目录", id: 0, pid: null, open: true }];
       this.loading = true;
       categoryService.findAll().then(rep => {
         const setting = {
@@ -223,11 +176,12 @@ export default {
           },
           callback: {
             onClick: (e, type, node) => {
-              this.query.category = node.id == 0 ? null : node.id;
-              this.render();
+              const nodes = this.$treeObj.transformToArray(node);
+              this.data = nodes.filter(node => node.id != 0);
             }
           }
         };
+        this.data = rep;
 
         this.treeData = treeData.concat(
           rep.map(item => {
@@ -250,26 +204,28 @@ export default {
       const node = this.$treeObj.getSelectedNodes();
       if (node.length > 0) {
         if (node[0].id != 0) {
-          this.model.category = node[0].id;
+          this.model.pid = node[0].id;
         }
       }
     },
     onEdit(row) {
       this.action = "edit";
       this.model = this._clone(Model(), row);
-      this.initialValue = row.content;
       this.dialog = true;
     },
     onDel(row) {
       this.$Modal.confirm({
         title: "提示",
-        content: `确定要删除课程【${row.title}】吗？`,
+        content: `确定要删除【${row.name}】吗？`,
         onOk: () => {
+          if (this.treeData.filter(node => node.pid == row.id).length > 0) {
+            return this.$Message.error("请先删除子栏目！");
+          }
           this.loading = true;
 
-          courseService.remove(row.id).then(rep => {
+          categoryService.remove(row.id).then(rep => {
             this.$Message.success("删除成功！");
-            this.render();
+            this.renderTree();
           });
         }
       });
@@ -279,18 +235,17 @@ export default {
         if (valid) {
           const params = JSON.parse(JSON.stringify(this.model));
           delete params.id;
-          params.content = this.$refs.editor.value;
           this.loading = true;
           if (this.action == "add") {
-            courseService.add(params).then(rep => {
+            categoryService.add(params).then(rep => {
               this.$Message.success("新增成功！");
-              this.render();
+              this.renderTree();
               this.dialog = false;
             });
           } else {
-            courseService.update(this.model.id, params).then(rep => {
+            categoryService.update(this.model.id, params).then(rep => {
               this.$Message.success("更新成功！");
-              this.render();
+              this.renderTree();
               this.dialog = false;
             });
           }
@@ -300,12 +255,11 @@ export default {
   },
   mounted() {
     this.renderTree();
-    this.render();
   }
 };
 </script>
 <style lang="less">
-.p-course {
+.p-category {
   height: 100%;
   position: relative;
   display: flex;

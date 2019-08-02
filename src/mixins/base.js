@@ -5,7 +5,14 @@ export default {
     ...mapState("common", ["areas"])
   },
   methods: {
-
+    _clone(target, data) {
+      for (let d in data) {
+        if (d in target) {
+          target[d] = data[d];
+        }
+      }
+      return target;
+    }
   },
   mounted() {
     if (this.baseTime) clearInterval(this.baseTime);

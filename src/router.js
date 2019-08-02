@@ -32,13 +32,24 @@ export default new Router({
     },
     {
       path: "/",
+      meta: {
+        title: "课程管理"
+      },
       component: () => import("@/layout/single"),
       children: [
         {
           path: "",
           name: "Home",
           meta: {
-            title: "课程管理"
+            title: "栏目管理"
+          },
+          component: () => import("@/views/course/category")
+        },
+        {
+          path: "/course",
+          name: "Course",
+          meta: {
+            title: "课程列表"
           },
           component: () => import("@/views/course/list")
         }
