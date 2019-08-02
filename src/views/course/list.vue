@@ -112,7 +112,7 @@ export default {
         {
           title: "栏目",
           key: "category",
-          width: 100,
+          width: 200,
           render: (h, { row }) => {
             const target = this.treeData.find(d => d.id == row.category);
             return h("div", target ? target.name : "-");

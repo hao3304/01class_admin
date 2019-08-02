@@ -230,8 +230,9 @@ export default {
 
 .f-header {
   height: @HeaderHeight;
-  background-image: url("./images/header-bg.png");
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.06);
+  /*background-image: url("./images/header-bg.png");*/
+  box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+  background-color: #015293;
   border-bottom: 4px solid rgba(0, 0, 0, 0.1);
   display: flex;
   padding: 0 10px;
