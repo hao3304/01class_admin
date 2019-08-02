@@ -70,9 +70,9 @@
         <Icon type="md-arrow-dropdown" />
 
         <CellGroup slot="content">
-          <Cell title="我的审批">
-            <Badge :count="myTicket" slot="extra" />
-          </Cell>
+          <!--          <Cell title="我的审批">-->
+          <!--            <Badge :count="myTicket" slot="extra" />-->
+          <!--          </Cell>-->
           <Cell>
             <div @click="onLogout">退出</div>
           </Cell>
@@ -94,7 +94,7 @@
         <f-icon icon="iconshuaxin1" @click="onRefresh"></f-icon>
       </a>
       <a href="javascript:;">
-        <f-icon icon="icontuichu" @click="onLogout"></f-icon>
+        <f-icon icon="iconqiehuanzuhu" @click="onLogout"></f-icon>
       </a>
     </div>
 

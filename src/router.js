@@ -54,6 +54,21 @@ export default new Router({
           component: () => import("@/views/course/list")
         }
       ]
+    },
+    {
+      path: "/user",
+
+      component: () => import("@/layout/single"),
+      children: [
+        {
+          path: "list",
+          name: "User",
+          meta: {
+            title: "用户管理"
+          },
+          component: () => import("@/views/user/list")
+        }
+      ]
     }
   ]
 });

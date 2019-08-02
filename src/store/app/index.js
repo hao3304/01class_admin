@@ -20,6 +20,12 @@ export default {
             path: "Course"
           }
         ]
+      },
+      {
+        id: 2,
+        name: "用户管理",
+        icon: "icon-yonghu1",
+        path: "User"
       }
     ],
     module: 0,
