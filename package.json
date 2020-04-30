@@ -22,7 +22,7 @@
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
     "iview": "^3.4.2",
-    "jquery": "1.12.4",
+    "jquery": "3.5.0",
     "lightbox2": "^2.11.0",
     "store": "^2.0.12",
     "unfetch": "^4.1.0",
