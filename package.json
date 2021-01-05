@@ -15,7 +15,7 @@
     "apollo-link-error": "^1.1.8",
     "apollo-link-http": "^1.5.12",
     "apollo-link-ws": "^1.0.15",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "echarts": "^4.1.0",
     "fvc": "^0.6.0",
     "fvc-iot": "^0.4.4",
